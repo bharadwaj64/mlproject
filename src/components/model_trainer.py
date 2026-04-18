@@ -20,7 +20,6 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import AdaBoostRegressor 
 from sklearn.ensemble import GradientBoostingRegressor 
-from xgboost import XGBRegressor 
 from catboost import CatBoostRegressor
 
 from sklearn.model_selection import GridSearchCV
@@ -53,7 +52,6 @@ class ModelTrainer:
                 'RandomForestClassifier':RandomForestRegressor(),
                 'AdaBoostRegressor':AdaBoostRegressor(),
                 'GradientBoostingRegressor':GradientBoostingRegressor(),
-                'XGBRegressor':XGBRegressor(),
                 'CatBoostRegressor':CatBoostRegressor(verbose=0)
             }
 
@@ -69,9 +67,6 @@ class ModelTrainer:
                 },
                 "LinearRegression":{
                     'fit_intercept': [True,False]
-                },
-                "XGBRegressor":{
-                    'learning_rate':[.1,.01,.05,.001],
                 },
                 "CatBoostRegressor":{
                     'depth': [6,8,10],
