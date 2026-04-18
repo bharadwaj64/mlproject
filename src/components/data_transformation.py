@@ -21,6 +21,8 @@ from src.utils import save_object
 @dataclass 
 class DataTransformationConfig:
     preprocessor_obj_file_path = os.path.join('artifacts','pickle.pkl')
+    preprocessor_train_data_file_path = os.path.join('artifacts','scaled_train_data.csv')
+    preprocessor_test_data_file_path = os.path.join('artifacts','scaled_test_data.csv')
 
 class DataTransformation:
     def __init__(self):
@@ -58,6 +60,8 @@ class DataTransformation:
         
     def initiate_data_transformation(self,train_path,test_path):
         try:
+            os.makedirs(os.path.dirname(self.data_transformation_config.preprocessor_obj_file_path),exist_ok=True)
+
             logging.info('preprocessing the datasets')
             train_df = pd.read_csv(train_path) 
             test_df = pd.read_csv(test_path) 
@@ -78,6 +82,12 @@ class DataTransformation:
             train_arr = np.c_[input_feature_train_arr,np.array(target_feature_train_df)]
             test_arr = np.c_[input_feature_test_arr,np.array(target_feature_test_df)]
 
+            train_arr_df = pd.DataFrame(train_arr)
+            test_arr_df = pd.DataFrame(test_arr)
+
+            train_arr_df.to_csv(self.data_transformation_config.preprocessor_train_data_file_path,index=False)
+            test_arr_df.to_csv(self.data_transformation_config.preprocessor_test_data_file_path,index=False)
+
             save_object(
                 file_path = self.data_transformation_config.preprocessor_obj_file_path,
                 obj = preprocessing_obj
@@ -86,8 +96,7 @@ class DataTransformation:
 
             return (
                 train_arr,
-                test_arr,
-                self.data_transformation_config.preprocessor_obj_file_path
+                test_arr
             )
 
         except Exception as e:
